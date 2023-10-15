@@ -17,46 +17,50 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { useForm } from "react-hook-form"
 
 const LoginForm = () => {
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+    } = useForm({defaultValues: {tenant: "tenant1"}});
+
+    const onSubmit = (data) => {
+        console.log(data);
+    };
+
+    const onError = (errors, e) => console.log(errors, e);
+
     return (
         <div className="m-4">
             <Card className="w-[350px]">
-                <CardHeader>
-                    <CardTitle>Login</CardTitle>
-                    <CardDescription>ログイン</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form>
+                <form onSubmit={handleSubmit(onSubmit,onError)}>
+                    <CardHeader>
+                        <CardTitle>Login</CardTitle>
+                        <CardDescription>ログイン</CardDescription>
+                    </CardHeader>
+                    <CardContent>
                         <div className="grid items-center w-full gap-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="mail">ID(メールアドレス)</Label>
-                                <Input id="mail" placeholder="xxx@example.com" />
+                                <Input {...register('id')} id="mail" placeholder="xxx@example.com" />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">パスワード</Label>
-                                <Input id="password" type="password" /> 
+                                <Input {...register('password')} id="password" type="password" />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="tenant">所属組織</Label>
-                                <Select>
-                                    <SelectTrigger id="tenant">
-                                        <SelectValue placeholder="Select" />
-                                    </SelectTrigger>
-                                    <SelectContent position="popper">
-                                        <SelectItem value="tenant1">テナント１</SelectItem>
-                                        <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                                        <SelectItem value="astro">Astro</SelectItem>
-                                        <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Input  {...register('tenant')} id="tenant" />
                             </div>
                         </div>
-                    </form>
-                </CardContent>
-                <CardFooter className="flex flex-rows justify-items-right">
-                    <Button>Login</Button>
-                </CardFooter>
+
+                    </CardContent>
+                    <CardFooter className="flex flex-rows justify-items-right">
+                        <Button type="submit">Login</Button>
+                    </CardFooter>
+                </form>
             </Card>
         </div>
     );
