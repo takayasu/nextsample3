@@ -17,14 +17,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 
 const LoginForm = () => {
     const {
-        register,
+        control,
         formState: { errors },
         handleSubmit,
-    } = useForm({defaultValues: {tenant: "tenant1"}});
+    } = useForm({ defaultValues: { 
+        id: "",
+        password: "",
+        tenant: "tenant1" } });
 
     const onSubmit = (data) => {
         console.log(data);
@@ -35,7 +38,7 @@ const LoginForm = () => {
     return (
         <div className="m-4">
             <Card className="w-[350px]">
-                <form onSubmit={handleSubmit(onSubmit,onError)}>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
                     <CardHeader>
                         <CardTitle>Login</CardTitle>
                         <CardDescription>ログイン</CardDescription>
@@ -44,15 +47,23 @@ const LoginForm = () => {
                         <div className="grid items-center w-full gap-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="mail">ID(メールアドレス)</Label>
-                                <Input {...register('id')} id="mail" placeholder="xxx@example.com" />
+                                <Controller name="id" control={control} render={({ field }) => {
+                                    console.log(field);
+                                    return (
+                                    <Input {...field} placeholder="xxx@example.com" />
+                                )}} />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">パスワード</Label>
-                                <Input {...register('password')} id="password" type="password" />
+                                <Controller name="password" control={control} render={({ field }) => (
+                                    <Input {...field} id="password" type="password" />
+                                )} />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="tenant">所属組織</Label>
-                                <Input  {...register('tenant')} id="tenant" />
+                                <Controller name="tenant" control={control} render={({ field }) => (
+                                    <Input  {...field} id="tenant" />
+                                )} />
                             </div>
                         </div>
 
